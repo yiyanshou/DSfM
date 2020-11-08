@@ -14,7 +14,7 @@ n = 300    # number of books to sample
 ebooks = open("ebooks.txt")
 nums = []
 count = 0
-files_dir = "C:\\Users\\yiyan\\OneDrive\\Documents\\Python\\Gutenberg_robot\\files"
+files_dir = "files"
 for line in ebooks:
     if line[0] == '-':
         count = int(ebooks.readline())
