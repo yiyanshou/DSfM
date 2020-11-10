@@ -13,17 +13,17 @@ from nltk import PorterStemmer
 mat_txt = open("term_by_doc_mat.txt")
 
 #list of strings to query from the database
-query = ['twighlight', 'gods', 'legend', 'myth', 'story', 'tale', 'mystic',
-         'magic', 'good', 'evil', 'epic', 'quest', 'journey']
+query = ['good', 'evil', 'legend', 'myth', 'god', 'demon', 'spirit', 'ritual',
+         'sacred', 'sacrement', 'divine', 'holy', 'sin', 'deity']
 
 #proportion of rank to retain (assumes term_by_doc matrix is full rank)
-rp = 0.20
+rp = 0.4
 
 #threshold for when a document is considered a good match
 thresh = 0.0
 
 #number of recommendations
-n = 5
+n = 3
 
 #list of term-by-document matrices with W[0] = raw matrix, 
 #W[1] = column normalized, W[2] = boolean
@@ -80,7 +80,7 @@ for i in range(3):
         rec_vec[i][0, j] = d / (q_vec_norm * lin.norm(W_red[i][0:, j]))
 
 #retrieves a list of recommendations based on thresh and supplied dictionary of
-#documents
+#documents. List is in ascending order of relevance.
 docs = {}
 with open("docs.txt") as f:
     for line in f:
@@ -90,19 +90,17 @@ with open("docs.txt") as f:
 recs = [None] * 3
 for i in range(3):
     recs[i] = []
-    inds = []
+    threshed_inds = []
     for j in range(rec_vec[i].shape[1]):
         if rec_vec[i][0, j] >= thresh:
-            inds.append(j)
-    threshed = np.array([rec_vec[i][0, j] for j in inds])
+            threshed_inds.append(j)
+    threshed = np.array([rec_vec[i][0, j] for j in threshed_inds])
     m = min(len(threshed), n)
-    highest = np.argpartition(threshed, -m)[-m:]
-    highest_inds = [inds[j] for j in highest]
-    sorted_inds = np.argsort(np.array([rec_vec[i][0, j] for j in highest_inds]))
-    for j in sorted_inds:
-        recs[i].append(docs[j])
-
-print (np.max(rec_vec[0]))
-print (np.max(rec_vec[1])) 
-print (np.max(rec_vec[2])) 
+    highest_inds = [threshed_inds[j] for j in threshed.argpartition(-m)[-m:]]
+    highest = np.array([rec_vec[i][0,j] for j in highest_inds])
+    ascending_inds = [highest_inds[j] for j in highest.argsort()]
+    ascending = np.array([rec_vec[i][0,j] for j in ascending_inds])
+    for j in ascending_inds:
+        recs[i].append((docs[j], rec_vec[i][0,j]))
+ 
 print(recs)  
