@@ -10,3 +10,5 @@ sampler.py takes a file of ebook numbers and downloads a random sample of the co
 term_by_doc.py takes a folder of text files and produces a term-by-document matrix from the first n words in each file.
 
 QR.py uses rank reduction via QR decomposition to recommend books based on a list of keywords.
+
+SVD.py uses rank reduction via SVD to recommend books based on a list of keywords.
