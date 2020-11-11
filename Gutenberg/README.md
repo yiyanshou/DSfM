@@ -12,3 +12,5 @@ term_by_doc.py takes a folder of text files and produces a term-by-document matr
 QR.py uses rank reduction via QR decomposition to recommend books based on a list of keywords.
 
 SVD.py uses rank reduction via SVD to recommend books based on a list of keywords.
+
+SVD_cluster.py projects terms and documents onto the first two and three singular directions and displays the corresponding scatter plots.
